@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">-->
+</head>
+<body>
+<div style = "width:40%; float:left; padding:20px;" >
+    <table class="table table-striped" id="table1" >
+        <thead>
+        <tr>
+            <th scope="col">번호</th>
+            <th scope="col">영문필드명</th>
+            <th scope="col">한글필드명</th>
+            <th scope="col">길이</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="data : ${data1}" >
+            <td scope="row" th:text="${data.no}"></td>
+            <td th:text="${data.english_field}"></td>
+            <td th:text="${data.korean_field}"></td>
+            <td th:text="${data.length}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="col-lg-12" id="ex1_Result1" ></div>
+</div>
+
+<div style = "width:40%; float:right; padding:20px">
+    <table class="table table-striped" id="table2">
+        <thead>
+        <tr>
+            <th scope="col">번호</th>
+            <th scope="col">영문필드명</th>
+            <th scope="col">한글필드명</th>
+            <th scope="col">길이</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="data : ${data2}" >
+            <td scope="row" th:text="${data.no}"></td>
+            <td th:text="${data.english_field}"></td>
+            <td th:text="${data.korean_field}"></td>
+            <td th:text="${data.length}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="col-lg-12" id="ex1_Result2" ></div>
+</div>
+<button id="automapping" value="자동매핑"></button>
+<div id ="autoResult1" style== "width:40%; float:left; padding:20px"></div>
+<div id ="autoResult2" style== "width:40%; float:right; padding:20px"></div>
+</body>
+</html>
+
+<script>
+    // 테이블의 Row 클릭시 값 가져오기
+		$("#table1 tr").click(function(){
+
+			var str = ""
+			var tdArr = new Array();	// 배열 선언
+
+			// 현재 클릭된 Row(<tr>)
+			var tr = $(this);
+			var td = tr.children();
+
+			// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+			console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+
+			// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+			td.each(function(i){
+				tdArr.push(td.eq(i).text());
+			});
+
+			console.log("배열에 담긴 값 : "+tdArr);
+
+			$("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
+
+		});
+
+		// 테이블의 Row 클릭시 값 가져오기
+		$("#table2 tr").click(function(){
+
+			var str = ""
+			var tdArr = new Array();	// 배열 선언
+
+			// 현재 클릭된 Row(<tr>)
+			var tr = $(this);
+			var td = tr.children();
+
+			// tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+			console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+
+			// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+			td.each(function(i){
+				tdArr.push(td.eq(i).text());
+			});
+
+			console.log("배열에 담긴 값 : "+tdArr);
+
+			$("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
+
+		});
+
+		//자동매핑 눌렀을때
+		$('#automapping').on('click', function(){
+        var form = {
+                name: "jamong",
+                age: 23
+        }
+        $.ajax({
+            url: "automapping",
+            type: "POST",
+            data: form,
+            success: function(data){
+                $('#result').text(data);
+            },
+            error: function(){
+                alert("simpleWithObject err");
+            }
+        });
+    });
+</script>

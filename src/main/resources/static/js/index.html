@@ -8,28 +8,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <script src="js/excel.min.js"></script>
     <title>Document</title>
+    <style>
+        table{
+            border: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td{
+            border: 1px solid #444444;
+        }
+    </style>
+
 </head>
 
 <body class='container'>
 
 <div id = "navbar"><span>Mapping Program </span></div><br>
-<div id = "wrapper1" style = "width:30%; float:left;">
 
-    <input type = "file" id="input-excel1">
+    <div id = "wrapper1" style = "width:40%; float:left;">
 
-    <div id="grid1"></div>
+        <input type = "file" id="input-excel1">
 
-    <br>
-    <div class="col-lg-12" id="ex1_Result1" ></div>
-</div>
+        <div id="grid1"></div>
 
-<div id = "wrapper2" style = "width:30%; float:right;">
-    <input type = "file" id="input-excel2">
-    <br>
-    <div id="grid2"></div>
-    <br>
-    <div class="col-lg-12" id="ex1_Result2" ></div>
-</div>
+        <br>
+        <div class="col-lg-12" id="ex1_Result1" ></div>
+    </div>
+
+    <div id = "wrapper2" style = "width:40%; float:right;">
+        <input type = "file" id="input-excel2">
+        <br>
+        <div id="grid2"></div>
+        <br>
+        <div class="col-lg-12" id="ex1_Result2" ></div>
+    </div>
 
 
 
@@ -145,5 +156,8 @@ $('#input-excel2').change( function(){
     var table_id = 'excelResult2';
     gridExcelToWeb(selectedFile,  $('#grid2') ,table_id)
 });
+
+
+
 
 </script>
