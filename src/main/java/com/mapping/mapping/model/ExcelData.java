@@ -1,7 +1,7 @@
 package com.mapping.mapping.model;
 
 
-public class ExcelData {
+public class ExcelData implements Comparable<ExcelData>{
     private Integer no;
     private String english_field;
     private String korean_field;
@@ -40,6 +40,8 @@ public class ExcelData {
     }
 
 
-
-
+    @Override
+    public int compareTo(ExcelData o) {
+        return this.english_field.compareTo(o.getEnglish_field());
+    }
 }

@@ -1,8 +1,7 @@
 package com.mapping.mapping.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.mapping.mapping.model.ExcelData;
 import org.apache.commons.io.FilenameUtils;
@@ -30,43 +29,27 @@ public class ExcelController {
     @PostMapping("/excel/read")
     public String readExcel(
                     @RequestParam("file1") MultipartFile file1,
-                    @RequestParam("file2") MultipartFile file2, Model model)
-            throws IOException { // 2
+                    @RequestParam("file2") MultipartFile file2, Model model) throws IOException { // 2
 
-        List<ExcelData> dataList1 = new ArrayList<>();
-        List<ExcelData> dataList2 = new ArrayList<>();
-        String extension1 = FilenameUtils.getExtension(file1.getOriginalFilename()); // 3
-        String extension2 = FilenameUtils.getExtension(file2.getOriginalFilename()); // 3
+        List<ExcelData> dataList1 = getExcelList(file1);
+        List<ExcelData> dataList2 = getExcelList(file2);
 
-        if (!extension1.equals("xlsx") && !extension1.equals("xls") && !extension2.equals("xlsx") && !extension2.equals("xls")) {
-            throw new IOException("엑셀파일만 업로드 해주세요.");
-        }
+        List<List<ExcelData>> autoMappingResult = autoMapping(dataList1,dataList2);
 
-        Workbook workbook1 = null;
-        Workbook workbook2 = null;
-        if (extension1.equals("xlsx") && extension2.equals("xlsx") ) {
-            workbook1 = new XSSFWorkbook(file1.getInputStream());
-            workbook2 = new XSSFWorkbook(file2.getInputStream());
-        } else if (extension1.equals("xls") && extension2.equals("xls")) {
-            workbook1 = new HSSFWorkbook(file1.getInputStream());
-            workbook2 = new HSSFWorkbook(file2.getInputStream());
-        }
-
-        Sheet worksheet1 = workbook1.getSheetAt(0);
-        Sheet worksheet2 = workbook2.getSheetAt(0);
-
-        dataMapping(worksheet1, dataList1);
-        dataMapping(worksheet2, dataList2);
         model.addAttribute("data1", dataList1); // 5
         model.addAttribute("data2", dataList2);
+        model.addAttribute("commonData1",autoMappingResult.get(0));
+        model.addAttribute("commonData2",autoMappingResult.get(1));
+        model.addAttribute("remain1",autoMappingResult.get(2));
+        model.addAttribute("remain2",autoMappingResult.get(3));
         return "excelList";
 
     }
 
-    private void dataMapping(Sheet worksheet1, List<ExcelData> dataList) {
-        for (int i = 1; i < worksheet1.getPhysicalNumberOfRows(); i++) { // 4
+    private void dataMapping(Sheet worksheet, List<ExcelData> dataList) {
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) { // 4
 
-            Row row = worksheet1.getRow(i);
+            Row row = worksheet.getRow(i);
 
             ExcelData data = new ExcelData();
 
@@ -77,6 +60,69 @@ public class ExcelController {
 
             dataList.add(data);
         }
+    }
+    private List<ExcelData> getExcelList(MultipartFile file) throws IOException{
+        List<ExcelData> dataList = new ArrayList<>();
+        String extension = FilenameUtils.getExtension(file.getOriginalFilename()); // 3
+        if (!extension.equals("xlsx") && !extension.equals("xls") ) {
+            throw new IOException("엑셀파일만 업로드 해주세요.");
+        }
+        Workbook workbook = null;
+
+        if (extension.equals("xlsx")) {
+            workbook = new XSSFWorkbook(file.getInputStream());
+        } else if (extension.equals("xls")) {
+            workbook = new HSSFWorkbook(file.getInputStream());
+        }
+
+        Sheet worksheet = workbook.getSheetAt(0);
+        dataMapping(worksheet, dataList);
+
+        return dataList;
+    }
+
+    private List<List<ExcelData>> autoMapping(List<ExcelData> dataList1,List<ExcelData> dataList2 ){
+        List<List<ExcelData>> result = new ArrayList<>();
+        List<ExcelData> autoMappingResult1 = new ArrayList<>();
+        List<ExcelData> autoMappingResult2 = new ArrayList<>();
+        List<ExcelData> dataList1Remain = new ArrayList<>();
+        List<ExcelData> dataList2Remain = new ArrayList<>();
+
+        for(int i =0; i< dataList1.size(); i++){
+            for(int j =0; j< dataList2.size(); j++){
+                if(dataList1.get(i).getEnglish_field().equals(dataList2.get(j).getEnglish_field())){
+                    autoMappingResult1.add(dataList1.get(i));
+                    autoMappingResult2.add(dataList2.get(j));
+                    break;
+                }
+            }
+        }
+
+        Collections.sort(autoMappingResult1);
+        Collections.sort(autoMappingResult2);
+
+        getRemainExcelData(dataList1, autoMappingResult1, dataList1Remain);
+        getRemainExcelData(dataList2, autoMappingResult2, dataList2Remain);
+
+        result.add(0,autoMappingResult1);
+        result.add(1,autoMappingResult2);
+        result.add(2,dataList1Remain);
+        result.add(3,dataList2Remain);
+        return result;
+    }
+
+    private void getRemainExcelData(List<ExcelData> dataList, List<ExcelData> autoMappingResult, List<ExcelData> dataListRemain) {
+
+        Map<String, Integer> map = new HashMap<>();
+        for(int i =0; i< autoMappingResult.size(); i++){
+            map.put(autoMappingResult.get(i).getEnglish_field(),1);
+        }
+        for(int i =0; i< dataList.size(); i++){
+            if(map.getOrDefault(dataList.get(i).getEnglish_field() ,0) == 0){
+                dataListRemain.add(dataList.get(i));
+            }
+        }
+
     }
 
 }

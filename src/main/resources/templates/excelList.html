@@ -6,65 +6,144 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">-->
+    <style>
+        .button {
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-<div style = "width:40%; float:left; padding:20px;" >
-    <table class="table table-striped" id="table1" >
-        <thead>
-        <tr>
-            <th scope="col">번호</th>
-            <th scope="col">영문필드명</th>
-            <th scope="col">한글필드명</th>
-            <th scope="col">길이</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="data : ${data1}" >
-            <td scope="row" th:text="${data.no}"></td>
-            <td th:text="${data.english_field}"></td>
-            <td th:text="${data.korean_field}"></td>
-            <td th:text="${data.length}"></td>
-        </tr>
-        </tbody>
-    </table>
 
-    <div class="col-lg-12" id="ex1_Result1" ></div>
-</div>
+    <div style = "width:35%; float:left; padding:20px;" >
+        <table class="table table-bordered" id="table1" >
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${data1}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table class="table table-bordered" id="table2" style="visibility:hidden">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${commonData1}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            <tr th:each="data : ${remain1}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col-lg-12" id="ex1_Result1" ></div>
+        <div id = "test" style="width:100px; height:30px;"></div>
+    </div>
+    <svg><line style="width:50%" id ="line" stroke="red" stroke-width="3"></line></svg>
+<!--    <canvas id="canvas" style="width:30%;height:500px;border: 1px solid"></canvas>-->
+    <div style = "width:35%; float:right; padding:20px">
+        <table class="table table-bordered" id="table3">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${data2}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
 
-<div style = "width:40%; float:right; padding:20px">
-    <table class="table table-striped" id="table2">
-        <thead>
-        <tr>
-            <th scope="col">번호</th>
-            <th scope="col">영문필드명</th>
-            <th scope="col">한글필드명</th>
-            <th scope="col">길이</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="data : ${data2}" >
-            <td scope="row" th:text="${data.no}"></td>
-            <td th:text="${data.english_field}"></td>
-            <td th:text="${data.korean_field}"></td>
-            <td th:text="${data.length}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="col-lg-12" id="ex1_Result2" ></div>
-</div>
-<button id="automapping" value="자동매핑"></button>
-<div id ="autoResult1" style== "width:40%; float:left; padding:20px"></div>
-<div id ="autoResult2" style== "width:40%; float:right; padding:20px"></div>
+        <br>
+        <table class="table table-bordered" id="table4" style="visibility:hidden">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${commonData2}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            <tr th:each="data : ${remain2}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
+        <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
+        <div class="col-lg-12" id="ex1_Result2" ></div>
+
+        <div id = "test2" style="width:100px; height:30px;"></div>
+    </div>
+
 </body>
 </html>
 
 <script>
+        line = $('#line');
+        var x1;
+        var y1;
+        var x2;
+        var y2;
     // 테이블의 Row 클릭시 값 가져오기
-		$("#table1 tr").click(function(){
+		$("#table1 tr").click(function(e){
 
 			var str = ""
 			var tdArr = new Array();	// 배열 선언
 
+			x1 = e.pageX;
+			y1 = e.pageY;
+
+			var test = x1+" "+ y1;
+            document.getElementById("test").innerHTML = test;
 			// 현재 클릭된 Row(<tr>)
 			var tr = $(this);
 			var td = tr.children();
@@ -79,15 +158,26 @@
 
 			console.log("배열에 담긴 값 : "+tdArr);
 
-			$("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
+            // td.eq(index)를 통해 값을 가져옴
+            var no = td.eq(0).text();
+            var english_field = td.eq(1).text();
+            var korean_field = td.eq(2).text();
+            var length = td.eq(3).text();
 
+            $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
 		});
 
 		// 테이블의 Row 클릭시 값 가져오기
-		$("#table2 tr").click(function(){
+		$("#table3 tr").click(function(e){
 
 			var str = ""
 			var tdArr = new Array();	// 배열 선언
+
+            x2 = e.pageX;
+			y2 = e.pageY;
+
+			var test = x2+" "+ y2;
+            document.getElementById("test2").innerHTML = test;
 
 			// 현재 클릭된 Row(<tr>)
 			var tr = $(this);
@@ -107,22 +197,17 @@
 
 		});
 
-		//자동매핑 눌렀을때
-		$('#automapping').on('click', function(){
-        var form = {
-                name: "jamong",
-                age: 23
-        }
-        $.ajax({
-            url: "automapping",
-            type: "POST",
-            data: form,
-            success: function(data){
-                $('#result').text(data);
-            },
-            error: function(){
-                alert("simpleWithObject err");
-            }
-        });
-    });
+
+    function visibleTable(){
+        table2.style.visibility="visible";
+        table4.style.visibility="visible";
+    }
+    function drawLine(){
+        line
+        .attr('x1', x1)
+        .attr('y1', y1)
+        .attr('x2', x2)
+        .attr('y2', y2)
+    }
+
 </script>
