@@ -33,7 +33,6 @@ public class ExcelController {
 
         List<ExcelData> dataList1 = getExcelList(file1);
         List<ExcelData> dataList2 = getExcelList(file2);
-
         List<List<ExcelData>> autoMappingResult = autoMapping(dataList1,dataList2);
 
         model.addAttribute("data1", dataList1); // 5
