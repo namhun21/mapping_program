@@ -10,90 +10,90 @@
 
 </head>
 <body>
-    <div id="container">
-        <div id="header">
-            <h1>Mapping program</h1>
-        </div>
+<div id="container">
+    <div id="header">
+        <h1>Mapping program</h1>
+    </div>
 
-        <div id="sidebar-left">
-            <table class="table" id="table1" >
-                <colgroup >
-                    <col width="48px"/>
-                    <col width="96px"/>
-                    <col width="282px"/>
-                    <col width="48px"/>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th scope="col">번호</th>
-                    <th scope="col">영문필드명</th>
-                    <th scope="col">한글필드명</th>
-                    <th scope="col">길이</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="data : ${data1}" >
-                    <td scope="row" th:text="${data.no}"></td>
-                    <td th:text="${data.english_field}"></td>
-                    <td th:text="${data.korean_field}"></td>
-                    <td th:text="${data.length}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-            <ul class="col-lg-12" id="ex1_Result1" ></ul>
-            <ul id = "test" style="width:100px; height:30px;"></ul>
-        </div> <!-- side left-->
+    <div id="sidebar-left">
+        <table class="table" id="table1" >
+            <colgroup >
+                <col width="48px"/>
+                <col width="96px"/>
+                <col width="282px"/>
+                <col width="48px"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${data1}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <ul class="col-lg-12" id="ex1_Result1" ></ul>
+        <ul id = "test" style="width:100px; height:30px;"></ul>
+    </div> <!-- side left-->
 
-<!--        <div id="draw" class ="canvas">-->
-            <svg id="draw" class="canvas">
-<!--            <svg width="438px" height="400px" >-->
-<!--                <line id ="line"  stroke="red" stroke-width="3" ></line>-->
-            </svg>
-<!--        </div> &lt;!&ndash; draw &ndash;&gt;-->
+    <!--        <div id="draw" class ="canvas">-->
+    <svg id="draw" class="canvas">
+        <!--            <svg width="438px" height="400px" >-->
+        <!--                <line id ="line"  stroke="red" stroke-width="3" ></line>-->
+    </svg>
+    <!--        </div> &lt;!&ndash; draw &ndash;&gt;-->
 
-        <div id="sidebar-right">
-            <table class="table" id="table2">
-                <colgroup >
-                    <col width="48px"/>
-                    <col width="96px"/>
-                    <col width="282px"/>
-                    <col width="48px"/>
-                </colgroup>
-                <thead>
-                <tr>
-                    <th scope="col">번호</th>
-                    <th scope="col">영문필드명</th>
-                    <th scope="col">한글필드명</th>
-                    <th scope="col">길이</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="data : ${data2}" >
-                    <td scope="row" th:text="${data.no}"></td>
-                    <td th:text="${data.english_field}"></td>
-                    <td th:text="${data.korean_field}"></td>
-                    <td th:text="${data.length}"></td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
+    <div id="sidebar-right">
+        <table class="table" id="table2">
+            <colgroup >
+                <col width="48px"/>
+                <col width="96px"/>
+                <col width="282px"/>
+                <col width="48px"/>
+            </colgroup>
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">영문필드명</th>
+                <th scope="col">한글필드명</th>
+                <th scope="col">길이</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${data2}" >
+                <td scope="row" th:text="${data.no}"></td>
+                <td th:text="${data.english_field}"></td>
+                <td th:text="${data.korean_field}"></td>
+                <td th:text="${data.length}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
 
-<!--            <span class="btn">매핑</span>-->
-            <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
-            <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
-            <input type = "button" id="showResult" value="결과보기" onclick="tableCreate()" style = "width:20%; float:right;"/>
-            <input type = "button" id="removeLine" value="초기화" onclick="pageClear()" style = "width:20%; float:right;"/>
+        <!--            <span class="btn">매핑</span>-->
+        <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
+        <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
+        <input type = "button" id="showResult" value="결과보기" onclick="tableCreate()" style = "width:20%; float:right;"/>
+        <input type = "button" id="removeLine" value="초기화" onclick="pageClear()" style = "width:20%; float:right;"/>
 
 
-            <ul class="col-lg-12" id="ex1_Result2" ></ul>
-            <ul id = "test2" style="width:100px; height:30px;"></ul>
-        </div> <!-- side right-->
+        <ul class="col-lg-12" id="ex1_Result2" ></ul>
+        <ul id = "test2" style="width:100px; height:30px;"></ul>
+    </div> <!-- side right-->
 
-        <div id="footer">
-            <h1>Mapping Result</h1>
-        </div>
-            <span id="footer-sidebar-left">
+    <div id="footer">
+        <h1>Mapping Result</h1>
+    </div>
+    <span id="footer-sidebar-left">
                 <table class="table" id="table3" style="visibility:hidden;">
                     <colgroup >
                         <col width="48px"/>
@@ -120,7 +120,7 @@
                 </table>
             </span>
 
-            <span id="footer-sidebar-right">
+    <span id="footer-sidebar-right">
                 <table class="table" id="table4" style="visibility:hidden;">
                     <colgroup >
                         <col width="48px"/>
@@ -147,7 +147,7 @@
                 </table>
             </span>
 
-    </div> <!--    container   -->
+</div> <!--    container   -->
 
 </body>
 </html>
@@ -268,6 +268,8 @@
         if(mode =='normal'){
             d3.selectAll(".line").remove();
             mode = 'auto';
+            table1 = [];
+            table2 = [];
         }
 
         table3.style.visibility="visible";
@@ -297,11 +299,89 @@
 
         html1 = '';
         html2 = '';
+        var table1Remain = new Array();
+        var table2Remain = new Array();
+        var index = 0;
 
         if(mode=='auto'){
                 d3.selectAll(".line").remove();
                 mode = 'auto';
         }
+
+        $('#table1 tr').each(function(){
+            if(index ==0){
+                index++;
+
+            }
+            else{
+                var tr = $(this);
+                var td = tr.children();
+                var flag = true;
+
+                var no = td.eq(0).text();
+                var english_field = td.eq(1).text();
+                var korean_field = td.eq(2).text();
+                var length = td.eq(3).text();
+
+                for(var i =0; i< table1.length ; i++){
+                    if(english_field == table1[i].english_field){
+                    flag = true;
+                        break;
+                    }else{
+                            flag = false;
+                        }
+                    }
+
+                    if(flag == false){
+                        var obj = {};
+                        obj['no'] = no;
+                        obj['english_field'] = english_field;
+                        obj['korean_field'] = korean_field;
+                        obj['length'] = length;
+                        table1Remain.push(obj);
+                    }
+                    index++;
+                }
+
+        });
+
+        index = 0;
+
+        $('#table2 tr').each(function(){
+            if(index ==0){
+                index++;
+
+            }
+            else{
+                var tr = $(this);
+                var td = tr.children();
+                var flag = true;
+
+                var no = td.eq(0).text();
+                var english_field = td.eq(1).text();
+                var korean_field = td.eq(2).text();
+                var length = td.eq(3).text();
+                for(var i =0; i< table2.length ; i++){
+                            if(english_field == table2[i].english_field){
+                            flag = true;
+                                break;
+                            }else{
+                                    flag = false;
+                                }
+                            }
+
+                            if(flag == false){
+                                var obj = {};
+                                obj['no'] = no;
+                                obj['english_field'] = english_field;
+                                obj['korean_field'] = korean_field;
+                                obj['length'] = length;
+                                table2Remain.push(obj);
+                            }
+                            index++;
+                        }
+
+                });
 <!--        english_field기준으로 정렬-->
 
         table1.sort(function(a,b){
@@ -335,6 +415,14 @@
             html1 += '<td>'+table1[key].length+'</td>';
             html1 += '</tr>';
         }
+        for(key in table1Remain){
+            html1 += '<tr>';
+            html1 += '<td>'+table1Remain[key].no+'</td>';
+            html1 += '<td>'+table1Remain[key].english_field+'</td>';
+            html1 += '<td>'+table1Remain[key].korean_field+'</td>';
+            html1 += '<td>'+table1Remain[key].length+'</td>';
+            html1 += '</tr>';
+        }
         $("#table3body").empty();
         $("#table3body").append(html1);
 
@@ -344,6 +432,14 @@
             html2 += '<td>'+table2[key].english_field+'</td>';
             html2 += '<td>'+table2[key].korean_field+'</td>';
             html2 += '<td>'+table2[key].length+'</td>';
+            html2 += '</tr>';
+        }
+        for(key in table2Remain){
+            html2 += '<tr>';
+            html2 += '<td>'+table2Remain[key].no+'</td>';
+            html2 += '<td>'+table2Remain[key].english_field+'</td>';
+            html2 += '<td>'+table2Remain[key].korean_field+'</td>';
+            html2 += '<td>'+table2Remain[key].length+'</td>';
             html2 += '</tr>';
         }
         $("#table4body").empty();
