@@ -53,7 +53,7 @@
 <!--        </div> &lt;!&ndash; draw &ndash;&gt;-->
 
         <div id="sidebar-right">
-            <table class="table" id="table3">
+            <table class="table" id="table2">
                 <colgroup >
                     <col width="48px"/>
                     <col width="96px"/>
@@ -80,8 +80,10 @@
             <br>
 
 <!--            <span class="btn">매핑</span>-->
-            <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
             <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
+            <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
+            <input type = "button" id="showResult" value="결과보기" onclick="tableCreate()" style = "width:20%; float:right;"/>
+
 
             <ul class="col-lg-12" id="ex1_Result2" ></ul>
             <ul id = "test2" style="width:100px; height:30px;"></ul>
@@ -91,7 +93,7 @@
             <h1>Mapping Result</h1>
         </div>
             <span id="footer-sidebar-left">
-                <table class="table" id="table2" style="visibility:hidden;">
+                <table class="table" id="table3" style="visibility:hidden;">
                     <colgroup >
                         <col width="48px"/>
                         <col width="96px"/>
@@ -106,14 +108,8 @@
                         <th scope="col">길이</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr th:each="data : ${commonData1}" >
-                        <td scope="row" th:text="${data.no}"></td>
-                        <td th:text="${data.english_field}"></td>
-                        <td th:text="${data.korean_field}"></td>
-                        <td th:text="${data.length}"></td>
-                    </tr>
-                    <tr th:each="data : ${remain1}" >
+                    <tbody id="table3body">
+                    <tr th:each="data : ${result1}" >
                         <td scope="row" th:text="${data.no}"></td>
                         <td th:text="${data.english_field}"></td>
                         <td th:text="${data.korean_field}"></td>
@@ -139,14 +135,8 @@
                         <th scope="col">길이</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr th:each="data : ${commonData2}" >
-                        <td scope="row" th:text="${data.no}"></td>
-                        <td th:text="${data.english_field}"></td>
-                        <td th:text="${data.korean_field}"></td>
-                        <td th:text="${data.length}"></td>
-                    </tr>
-                    <tr th:each="data : ${remain2}" >
+                    <tbody id="table4body">
+                    <tr th:each="data : ${result2}" >
                         <td scope="row" th:text="${data.no}"></td>
                         <td th:text="${data.english_field}"></td>
                         <td th:text="${data.korean_field}"></td>
@@ -158,20 +148,21 @@
 
     </div> <!--    container   -->
 
-
-
-
-
-
 </body>
 </html>
 
-<script>
-        line = $('#line');
+<script th:inline="javascript">
+
         var x1;
         var y1;
         var x2;
         var y2;
+        var table1 = new Array();
+        var table2 = new Array();
+
+        var html1 = '';
+        var html2 = '';
+
         $("#draw").click(function(e){
 			x1 = e.pageX;
 			y1 = e.pageY;
@@ -211,11 +202,18 @@
             var korean_field = td.eq(2).text();
             var length = td.eq(3).text();
 
+            var obj = {};
+            obj['no'] = no;
+            obj['english_field'] = english_field;
+            obj['korean_field'] = korean_field;
+            obj['length'] = length;
+
+            table1.push(obj);
             $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
 		});
 
 		// 테이블의 Row 클릭시 값 가져오기
-		$("#table3 tr").click(function(e){
+		$("#table2 tr").click(function(e){
 
 			var str = ""
 			var tdArr = new Array();	// 배열 선언
@@ -240,23 +238,32 @@
 
 			console.log("배열에 담긴 값 : "+tdArr);
 
+            // td.eq(index)를 통해 값을 가져옴
+            var no = td.eq(0).text();
+            var english_field = td.eq(1).text();
+            var korean_field = td.eq(2).text();
+            var length = td.eq(3).text();
+
+            var obj = {};
+            obj['no'] = no;
+            obj['english_field'] = english_field;
+            obj['korean_field'] = korean_field;
+            obj['length'] = length;
+            console.log("obj 값: "+ obj)
+            table2.push(obj);
+
 			$("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
 
 		});
 
 
     function visibleTable(){
-        table2.style.visibility="visible";
+        table3.style.visibility="visible";
         table4.style.visibility="visible";
 
     }
     function drawLine(){
-<!--            const canvas = d3.select(".canvas");-->
 
-<!--            const svg = canvas-->
-<!--                        .append("svg")-->
-<!--                        .attr("height",400)-->
-<!--                        .attr("width",438)-->
             const svg = d3.select(".canvas");
 
             svg.append("line")
@@ -266,25 +273,54 @@
                         .attr("y2",y2-200+35)
                         .attr("stroke","red")
 
-<!--                line-->
-<!--                     .attr('x1',2)-->
-<!--                     .attr('y1',y1-200+35)-->
-<!--                     .attr('x2', 435)-->
-<!--                     .attr('y2',y2-200+35);-->
-
-<!--            line-->
-<!--                .attr('x1', 625)-->
-<!--                .attr('y1',y1)-->
-<!--                .attr('x2',1050)-->
-<!--                .attr('y2',y2)-->
-
-<!--            var line = document.getElementById('line')-->
-<!--            line.x1.baseVal.value = 625;-->
-<!--            line.y1.baseVal.value = y1;-->
-<!--            line.x2.baseVal.value = 1050;-->
-<!--            line.y2.baseVal.value = y2;-->
-<!--            console.log(line);-->
     }
 
+    function tableCreate(){
+<!--        english_field기준으로 정렬-->
+        table1.sort(function(a,b){
+            var eng_fieldA = a.english_field.toLowerCase();
+            var eng_fieldB = b.english_field.toLowerCase();
+            if(eng_fieldA < eng_fieldB){
+                return -1;
+            }
+            if(eng_fieldA > eng_fieldB){
+                return 1;
+            }
+            return 0;
+        });
+
+        table2.sort(function(a,b){
+            var eng_fieldA = a.english_field.toLowerCase();
+            var eng_fieldB = b.english_field.toLowerCase();
+            if(eng_fieldA < eng_fieldB){
+                return -1;
+            }
+            if(eng_fieldA > eng_fieldB){
+                return 1;
+            }
+            return 0;
+        });
+        for(key in table1){
+            html1 += '<tr>';
+            html1 += '<td>'+table1[key].no+'</td>';
+            html1 += '<td>'+table1[key].english_field+'</td>';
+            html1 += '<td>'+table1[key].korean_field+'</td>';
+            html1 += '<td>'+table1[key].length+'</td>';
+            html1 += '</tr>';
+        }
+        $("#table3body").empty();
+        $("#table3body").append(html1);
+
+        for(key in table2){
+            html2 += '<tr>';
+            html2 += '<td>'+table2[key].no+'</td>';
+            html2 += '<td>'+table2[key].english_field+'</td>';
+            html2 += '<td>'+table2[key].korean_field+'</td>';
+            html2 += '<td>'+table2[key].length+'</td>';
+            html2 += '</tr>';
+        }
+        $("#table4body").empty();
+        $("#table4body").append(html2);
+    }
 
 </script>

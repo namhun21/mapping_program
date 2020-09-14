@@ -37,10 +37,9 @@ public class ExcelController {
 
         model.addAttribute("data1", dataList1); // 5
         model.addAttribute("data2", dataList2);
-        model.addAttribute("commonData1",autoMappingResult.get(0));
-        model.addAttribute("commonData2",autoMappingResult.get(1));
-        model.addAttribute("remain1",autoMappingResult.get(2));
-        model.addAttribute("remain2",autoMappingResult.get(3));
+        model.addAttribute("result1",autoMappingResult.get(0));
+        model.addAttribute("result2",autoMappingResult.get(1));
+
         return "excelList";
 
     }
@@ -100,17 +99,16 @@ public class ExcelController {
         Collections.sort(autoMappingResult1); //공통된 요소를 영문필드기준으로 정렬
         Collections.sort(autoMappingResult2);
 
-        getRemainExcelData(dataList1, autoMappingResult1, dataList1Remain);
-        getRemainExcelData(dataList2, autoMappingResult2, dataList2Remain);
+        getRemainExcelData(dataList1, autoMappingResult1);
+        getRemainExcelData(dataList2, autoMappingResult2);
 
         result.add(0,autoMappingResult1);
         result.add(1,autoMappingResult2);
-        result.add(2,dataList1Remain);
-        result.add(3,dataList2Remain);
+
         return result;
     }
 
-    private void getRemainExcelData(List<ExcelData> dataList, List<ExcelData> autoMappingResult, List<ExcelData> dataListRemain) {
+    private void getRemainExcelData(List<ExcelData> dataList, List<ExcelData> autoMappingResult) {
 
         Map<String, Integer> map = new HashMap<>();
         for(int i =0; i< autoMappingResult.size(); i++){
@@ -118,7 +116,7 @@ public class ExcelController {
         }
         for(int i =0; i< dataList.size(); i++){
             if(map.getOrDefault(dataList.get(i).getEnglish_field() ,0) == 0){
-                dataListRemain.add(dataList.get(i));
+                autoMappingResult.add(dataList.get(i));
             }
         }
 

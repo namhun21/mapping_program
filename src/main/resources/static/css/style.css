@@ -55,7 +55,7 @@
             width: 480px;
             margin-bottom: 20px;
             float: left;
-            border: 1px solid #bcbcbc;
+
           }
           #draw {
             position: absolute;
@@ -63,14 +63,14 @@
             height: 400px;
             margin-bottom: 20px;
             float: center;
-            border: 1px solid #bcbcbc;
+
           }
 
           #sidebar-right {
             width: 480px;
             margin-bottom: 20px;
             float: right;
-            border: 1px solid #bcbcbc;
+
           }
           #footer {
             clear: both;
