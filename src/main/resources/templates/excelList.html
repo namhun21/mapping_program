@@ -45,8 +45,8 @@
             <ul id = "test" style="width:100px; height:30px;"></ul>
         </div> <!-- side left-->
 
-<!--        <div id="draw" >-->
-            <svg id="draw">
+<!--        <div id="draw" class ="canvas">-->
+            <svg id="draw" class="canvas">
 <!--            <svg width="438px" height="400px" >-->
                 <line id ="line"  stroke="red" stroke-width="3" ></line>
             </svg>
@@ -251,12 +251,26 @@
 
     }
     function drawLine(){
+<!--            const canvas = d3.select(".canvas");-->
 
-                line
-                     .attr('x1',2)
-                     .attr('y1',y1-200+35)
-                     .attr('x2', 435)
-                     .attr('y2',y2-200+35);
+<!--            const svg = canvas-->
+<!--                        .append("svg")-->
+<!--                        .attr("height",400)-->
+<!--                        .attr("width",438)-->
+            const svg = d3.select(".canvas");
+
+            svg.append("line")
+                        .attr("x1",2)
+                        .attr("x2",435)
+                        .attr("y1",y1-200+35)
+                        .attr("y2",y2-200+35)
+                        .attr("stroke","red")
+
+<!--                line-->
+<!--                     .attr('x1',2)-->
+<!--                     .attr('y1',y1-200+35)-->
+<!--                     .attr('x2', 435)-->
+<!--                     .attr('y2',y2-200+35);-->
 
 <!--            line-->
 <!--                .attr('x1', 625)-->
