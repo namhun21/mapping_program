@@ -48,7 +48,7 @@
 <!--        <div id="draw" class ="canvas">-->
             <svg id="draw" class="canvas">
 <!--            <svg width="438px" height="400px" >-->
-                <line id ="line"  stroke="red" stroke-width="3" ></line>
+<!--                <line id ="line"  stroke="red" stroke-width="3" ></line>-->
             </svg>
 <!--        </div> &lt;!&ndash; draw &ndash;&gt;-->
 
@@ -83,6 +83,7 @@
             <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
             <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
             <input type = "button" id="showResult" value="결과보기" onclick="tableCreate()" style = "width:20%; float:right;"/>
+            <input type = "button" id="removeLine" value="초기화" onclick="pageClear()" style = "width:20%; float:right;"/>
 
 
             <ul class="col-lg-12" id="ex1_Result2" ></ul>
@@ -151,26 +152,20 @@
 </body>
 </html>
 
-<script th:inline="javascript">
-
+<script >
         var x1;
         var y1;
         var x2;
         var y2;
+        var mode = 'normal';
+        const svg = d3.select(".canvas");
         var table1 = new Array();
         var table2 = new Array();
 
         var html1 = '';
         var html2 = '';
 
-        $("#draw").click(function(e){
-			x1 = e.pageX;
-			y1 = e.pageY;
 
-			var test = x1+" "+ y1;
-            document.getElementById("test3").innerHTML = test;
-
-		});
     // 테이블의 Row 클릭시 값 가져오기
 		$("#table1 tr").click(function(e){
 
@@ -255,16 +250,38 @@
 			$("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
 
 		});
+		function pageClear(){
+            d3.selectAll(".line").remove();
+            table1 = [];
+            table2 = [];
+            html1 = '';
+            html2 = '';
+            mode = 'normal';
+            console.log(table1);
+            console.log(table2);
+            $("#table3body").empty();
+            $("#table4body").empty();
+    }
 
 
     function visibleTable(){
+        if(mode =='normal'){
+            d3.selectAll(".line").remove();
+            mode = 'auto';
+        }
+
         table3.style.visibility="visible";
         table4.style.visibility="visible";
 
     }
     function drawLine(){
 
-            const svg = d3.select(".canvas");
+            if(mode =='auto'){
+                d3.selectAll(".line").remove();
+                mode = 'normal';
+            }
+
+<!--            const svg = d3.select(".canvas");-->
 
             svg.append("line")
                         .attr("x1",2)
@@ -272,11 +289,21 @@
                         .attr("y1",y1-200+35)
                         .attr("y2",y2-200+35)
                         .attr("stroke","red")
+                        .attr("class","line")
 
     }
 
     function tableCreate(){
+
+        html1 = '';
+        html2 = '';
+
+        if(mode=='auto'){
+                d3.selectAll(".line").remove();
+                mode = 'auto';
+        }
 <!--        english_field기준으로 정렬-->
+
         table1.sort(function(a,b){
             var eng_fieldA = a.english_field.toLowerCase();
             var eng_fieldB = b.english_field.toLowerCase();
