@@ -97,7 +97,7 @@ public class ExcelController {
             }
         }
 
-        Collections.sort(autoMappingResult1);
+        Collections.sort(autoMappingResult1); //공통된 요소를 영문필드기준으로 정렬
         Collections.sort(autoMappingResult2);
 
         getRemainExcelData(dataList1, autoMappingResult1, dataList1Remain);

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://d3js.org/d3.v3.js"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
 </head>
@@ -45,9 +46,9 @@
         </div> <!-- side left-->
 
 <!--        <div id="draw" >-->
-            <svg>
+            <svg id="draw">
 <!--            <svg width="438px" height="400px" >-->
-                <line id ="line" style="width:438px; height:400px;" stroke="red" stroke-width="3" ></line>
+                <line id ="line"  stroke="red" stroke-width="3" ></line>
             </svg>
 <!--        </div> &lt;!&ndash; draw &ndash;&gt;-->
 
@@ -78,6 +79,7 @@
             </table>
             <br>
 
+<!--            <span class="btn">매핑</span>-->
             <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
             <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
 
@@ -246,8 +248,15 @@
     function visibleTable(){
         table2.style.visibility="visible";
         table4.style.visibility="visible";
+
     }
     function drawLine(){
+
+                line
+                     .attr('x1',2)
+                     .attr('y1',y1-200+35)
+                     .attr('x2', 435)
+                     .attr('y2',y2-200+35);
 
 <!--            line-->
 <!--                .attr('x1', 625)-->
@@ -255,12 +264,13 @@
 <!--                .attr('x2',1050)-->
 <!--                .attr('y2',y2)-->
 
-            var line = document.getElementById('line')
-            line.x1.baseVal.value = 625;
-            line.y1.baseVal.value = y1;
-            line.x2.baseVal.value = 1050;
-            line.y2.baseVal.value = y2;
-            console.log(line);
+<!--            var line = document.getElementById('line')-->
+<!--            line.x1.baseVal.value = 625;-->
+<!--            line.y1.baseVal.value = y1;-->
+<!--            line.x2.baseVal.value = 1050;-->
+<!--            line.y2.baseVal.value = y2;-->
+<!--            console.log(line);-->
     }
+
 
 </script>

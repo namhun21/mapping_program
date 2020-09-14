@@ -58,6 +58,7 @@
 
           }
           #draw {
+            position: absolute;
             width: 438px;
             height: 400px;
             margin-bottom: 20px;
@@ -89,6 +90,19 @@
               width: 480px;
               margin-bottom: 20px;
               float: right;
-
             }
+
+            .btn {
+              display: inline-block;
+              background: #4e7c80;
+              color: white;
+              width:20%;
+              float:right;
+              cursor: pointer;
+              position: relative;
+              z-index: 11;
+              line-height: 1em;
+              &:hover {
+                background: darken(#4e7c80, 10%);
+              }
   </style>
