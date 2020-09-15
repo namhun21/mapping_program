@@ -81,7 +81,7 @@
 
         <!--            <span class="btn">매핑</span>-->
         <input type = "button" id="automapping" value="자동매핑" onclick="visibleTable()" style = "width:20%; float:right;"/>
-        <input type = "button" id="mapping" value="매핑" onclick="drawLine()" style = "width:20%; float:right;"/>
+        <input type = "button" id="mapping" value="매핑" onclick="drawLine(y1,y2)" style = "width:20%; float:right;"/>
         <input type = "button" id="showResult" value="결과보기" onclick="tableCreate()" style = "width:20%; float:right;"/>
         <input type = "button" id="removeLine" value="초기화" onclick="pageClear()" style = "width:20%; float:right;"/>
 
@@ -94,7 +94,7 @@
         <h1>Mapping Result</h1>
     </div>
     <span id="footer-sidebar-left">
-                <table class="table" id="table3" style="visibility:hidden;">
+                <table class="table" id="table3" >
                     <colgroup >
                         <col width="48px"/>
                         <col width="96px"/>
@@ -110,18 +110,18 @@
                     </tr>
                     </thead>
                     <tbody id="table3body">
-                    <tr th:each="data : ${result1}" >
-                        <td scope="row" th:text="${data.no}"></td>
-                        <td th:text="${data.english_field}"></td>
-                        <td th:text="${data.korean_field}"></td>
-                        <td th:text="${data.length}"></td>
-                    </tr>
+<!--                    <tr th:each="data : ${result1}" >-->
+<!--                        <td scope="row" th:text="${data.no}"></td>-->
+<!--                        <td th:text="${data.english_field}"></td>-->
+<!--                        <td th:text="${data.korean_field}"></td>-->
+<!--                        <td th:text="${data.length}"></td>-->
+<!--                    </tr>-->
                     </tbody>
                 </table>
             </span>
 
     <span id="footer-sidebar-right">
-                <table class="table" id="table4" style="visibility:hidden;">
+                <table class="table" id="table4" >
                     <colgroup >
                         <col width="48px"/>
                         <col width="96px"/>
@@ -137,12 +137,12 @@
                     </tr>
                     </thead>
                     <tbody id="table4body">
-                    <tr th:each="data : ${result2}" >
-                        <td scope="row" th:text="${data.no}"></td>
-                        <td th:text="${data.english_field}"></td>
-                        <td th:text="${data.korean_field}"></td>
-                        <td th:text="${data.length}"></td>
-                    </tr>
+<!--                    <tr th:each="data : ${result2}" >-->
+<!--                        <td scope="row" th:text="${data.no}"></td>-->
+<!--                        <td th:text="${data.english_field}"></td>-->
+<!--                        <td th:text="${data.korean_field}"></td>-->
+<!--                        <td th:text="${data.length}"></td>-->
+<!--                    </tr>-->
                     </tbody>
                 </table>
             </span>
@@ -271,12 +271,188 @@
             table1 = [];
             table2 = [];
         }
+        html1 = '';
+        html2 = '';
+        var table1List = new Array();
+        var table2List = new Array();
+        var common1 = new Array();
+        var common2 = new Array();
+        var remain1 = new Array();
+        var remain2 = new Array();
+        var totalY1 = new Array();
+        var totalY2 = new Array();
+        var tableY1 = new Array();
+        var tableY2 = new Array();
+<!--        table3.style.visibility="visible";-->
+<!--        table4.style.visibility="visible";-->
 
-        table3.style.visibility="visible";
-        table4.style.visibility="visible";
+        var index = 0;
+        $('#table1 tr').each(function(){
+            if(index ==0){
+                index++;
 
+            }
+            else{
+                var tr = $(this);
+                var td = tr.children();
+                var flag = true;
+                var height = parseInt(tr.offset().top + tr.height() /2);
+                console.log(height);
+                totalY1.push(height);
+                var no = td.eq(0).text();
+                var english_field = td.eq(1).text();
+                var korean_field = td.eq(2).text();
+                var length = td.eq(3).text();
+                var obj = {};
+                obj['no'] = no;
+                obj['english_field'] = english_field;
+                obj['korean_field'] = korean_field;
+                obj['length'] = length;
+                table1List.push(obj);
+                console.log(obj);
+                        }
+
+                });
+
+        index = 0;
+        $('#table2 tr').each(function(){
+            if(index ==0){
+                index++;
+            }
+            else{
+                var tr = $(this);
+                var td = tr.children();
+                var flag = true;
+                var height = parseInt(tr.offset().top + tr.height() /2);
+                totalY2.push(height);
+                console.log(height);
+                var no = td.eq(0).text();
+                var english_field = td.eq(1).text();
+                var korean_field = td.eq(2).text();
+                var length = td.eq(3).text();
+                var obj = {};
+                obj['no'] = no;
+                obj['english_field'] = english_field;
+                obj['korean_field'] = korean_field;
+                obj['length'] = length;
+                table2List.push(obj);
+                console.log(obj);
+                        }
+
+                });
+
+        for(var i = 0; i< table1List.length ; i++){
+            for(var j =0; j< table2List.length ; j++){
+                if(table1List[i].english_field == table2List[j].english_field){
+                    common1.push(table1List[i]);
+                    common2.push(table2List[j]);
+                    tableY1.push(totalY1[i]);
+                    tableY2.push(totalY2[j]);
+                    break;
+                }
+            }
+        }
+
+        common1.sort(function(a,b){
+            var eng_fieldA = a.english_field.toLowerCase();
+            var eng_fieldB = b.english_field.toLowerCase();
+            if(eng_fieldA < eng_fieldB){
+                return -1;
+            }
+            if(eng_fieldA > eng_fieldB){
+                return 1;
+            }
+            return 0;
+        });
+
+        common2.sort(function(a,b){
+            var eng_fieldA = a.english_field.toLowerCase();
+            var eng_fieldB = b.english_field.toLowerCase();
+            if(eng_fieldA < eng_fieldB){
+                return -1;
+            }
+            if(eng_fieldA > eng_fieldB){
+                return 1;
+            }
+            return 0;
+        });
+
+        console.log(common1);
+        console.log(common2);
+
+        for(var i =0; i< table1List.length ; i++){
+            var flag = false;
+            for(var j =0 ; j< common1.length ; j++){
+                if(table1List[i].english_field == common1[j].english_field){
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag == false){
+                remain1.push(table1List[i]);
+            }
+        }
+
+        for(var i =0; i< table2List.length ; i++){
+            var flag = false;
+            for(var j =0 ; j< common2.length ; j++){
+                if(table2List[i].english_field == common2[j].english_field){
+                    flag = true;
+                    break;
+                }
+            }
+            if(flag == false){
+                remain2.push(table2List[i]);
+            }
+        }
+
+        console.log(remain1);
+        console.log(remain2);
+
+        for(key in common1){
+            html1 += '<tr>';
+            html1 += '<td>'+common1[key].no+'</td>';
+            html1 += '<td>'+common1[key].english_field+'</td>';
+            html1 += '<td>'+common1[key].korean_field+'</td>';
+            html1 += '<td>'+common1[key].length+'</td>';
+            html1 += '</tr>';
+        }
+        for(key in remain1){
+            html1 += '<tr>';
+            html1 += '<td>'+remain1[key].no+'</td>';
+            html1 += '<td>'+remain1[key].english_field+'</td>';
+            html1 += '<td>'+remain1[key].korean_field+'</td>';
+            html1 += '<td>'+remain1[key].length+'</td>';
+            html1 += '</tr>';
+        }
+        $("#table3body").empty();
+        $("#table3body").append(html1);
+
+
+        for(key in common2){
+            html2 += '<tr>';
+            html2 += '<td>'+common2[key].no+'</td>';
+            html2 += '<td>'+common2[key].english_field+'</td>';
+            html2 += '<td>'+common2[key].korean_field+'</td>';
+            html2 += '<td>'+common2[key].length+'</td>';
+            html2 += '</tr>';
+        }
+        for(key in remain2){
+            html2 += '<tr>';
+            html2 += '<td>'+remain2[key].no+'</td>';
+            html2 += '<td>'+remain2[key].english_field+'</td>';
+            html2 += '<td>'+remain2[key].korean_field+'</td>';
+            html2 += '<td>'+remain2[key].length+'</td>';
+            html2 += '</tr>';
+        }
+        $("#table4body").empty();
+        $("#table4body").append(html2);
+
+        for(var i = 0; i< tableY1.length ; i++){
+            drawLine(tableY1[i],tableY2[i]);
+        }
     }
-    function drawLine(){
+    function drawLine(y1, y2){
 
             if(mode =='auto'){
                 d3.selectAll(".line").remove();
