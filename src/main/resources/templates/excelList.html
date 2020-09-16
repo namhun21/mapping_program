@@ -136,9 +136,8 @@
 </html>
 
 <script>
-        var x1;
+        <!-- 전역 변수 -->
         var y1 = 0;
-        var x2;
         var y2 = 0;
         var mode = 'normal';
         const svg = d3.select(".canvas");
@@ -158,6 +157,7 @@
         $( "#table1 tr, #table2 tr" ).on( "mouseleave", function() {
             $( this ).css( "background-color", "white" );
         });
+
             <!--테이블의 Row 클릭시 값 가져오기-->
 		$("#table1 tr").click(function(e){
 
@@ -165,11 +165,6 @@
                 alert("초기화를 먼저 진행해주세요");
             }
             else{
-<!--                x1 = e.pageX;-->
-<!--                y1 = e.pageY;-->
-
-<!--                var test = x1+" "+ y1;-->
-<!--                document.getElementById("test").innerHTML = test;-->
 
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
@@ -194,11 +189,6 @@
                 alert("초기화를 먼저 진행해주세요");
             }
             else{
-<!--                x2 = e.pageX;-->
-<!--                y2 = e.pageY;-->
-
-<!--                var test = x2+" "+ y2;-->
-<!--                document.getElementById("test2").innerHTML = test;-->
 
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
@@ -216,6 +206,8 @@
             }
 
         });
+
+        <!--  테이블 row의 데이터를 가져오는 함수      -->
         function getTableElement(tr ,table){
                 var td = tr.children();
                 console.log("Row의 모든 데이터 : "+tr.text());
@@ -235,6 +227,8 @@
                 table.push(obj);
                 return table;
         }
+
+        <!--  화면 초기화를 위한 함수      -->
 		function pageClear(){
             d3.selectAll(".line").remove();
             table1 = [];
@@ -251,7 +245,7 @@
             $("#table3body").empty();
             $("#table4body").empty();
         }
-
+        <!-- 자동매핑 함수 -->
         function autoMapping(){
             if(mode =='normal'){
                 d3.selectAll(".line").remove();
@@ -278,6 +272,7 @@
 
             var index = 0;
 
+            <!-- 테이블의 tr을 돌며 y 좌표와 데이터값을 가져옴-->
             $('#table1 tr').each(function(){
                 if(index ==0){
                     index++;
@@ -310,7 +305,7 @@
                         table2List = getTableElement(tr, table2List);
                        }
                  });
-
+                <!--  공통 요소값을 저장 -->
                 for(var i = 0; i< table1List.length ; i++){
                     for(var j =0; j< table2List.length ; j++){
                         if(table1List[i].english_field == table2List[j].english_field){
@@ -323,6 +318,7 @@
                     }
                 }
 
+                <!--공통 요소들을 영문필드 명으로 정렬-->
                 common1.sort(function(a,b){
                     var eng_fieldA = a.english_field.toLowerCase();
                     var eng_fieldB = b.english_field.toLowerCase();
@@ -350,12 +346,14 @@
                 console.log(common1);
                 console.log(common2);
 
+                <!-- 나머지 데이터들 가져옴   -->
                 getRemain(table1List,common1,remain1);
                 getRemain(table2List,common2,remain2);
 
                 console.log(remain1);
                 console.log(remain2);
 
+                <!-- result 테이블에 결과 출력 -->
                 html1=createTBody(common1, remain1, html1);
                 $("#table3body").empty();
                 $("#table3body").append(html1);
@@ -369,6 +367,7 @@
                 }
             }
 
+            <!-- 공통된 요소가 아니라면 나머지요소 배열에 데이터 추가  -->
             function getRemain(tableList, common, remain){
                 for(var i =0; i< tableList.length ; i++){
                     var flag = false;
@@ -403,6 +402,7 @@
                     }
                     return html;
                 }
+            <!-- d3.js를 이용해 좌표를 받아 선을 그려줌 -->
             function drawLine(table1Y, table2Y){
                     console.log(table1Y+" "+ table2Y);
 
@@ -430,17 +430,14 @@
                     y2 = 0;
                     console.log(y1+" "+ y2);
                  }
-
+            <!-- 결과보기 버튼 -->
             function showResult(){
 
                 html1 = '';
                 html2 = '';
 
                 if(mode=='auto'){
-<!--                    d3.selectAll(".line").remove();-->
                     alert("초기화 후 매핑부터 시작해주세요.");
-<!--                    $("#table3body").empty();-->
-<!--                    $("#table4body").empty();-->
                   }
                 else if(table1.length == 0 && table2.length == 0){
                     alert("테이블 매핑 먼저 진행해 주세요");

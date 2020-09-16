@@ -1,6 +1,7 @@
 package com.mapping.mapping.model;
 
 
+//객체를 영문필드명 순으로 정렬하기 위해 Comparable 인터페이스 상속
 public class ExcelData implements Comparable<ExcelData>{
     private Integer no;
     private String english_field;
