@@ -149,8 +149,15 @@
         var html1 = '';
         var html2 = '';
 
-
-
+        <!-- 테이블 tr에 마우스 올려두었을 때 색 변경-->
+        $( "#table1 tr, #table2 tr" ).on( "mouseover", function() {
+            $( this ).css( "background-color", "#f4f4f4" );
+            $( this).children("td").css( "cursor", "pointer" );
+        });
+        <!--  마우스가 영역 벗어날 때 색 변경 -->
+        $( "#table1 tr, #table2 tr" ).on( "mouseleave", function() {
+            $( this ).css( "background-color", "white" );
+        });
             <!--테이블의 Row 클릭시 값 가져오기-->
 		$("#table1 tr").click(function(e){
 
@@ -158,44 +165,25 @@
                 alert("초기화를 먼저 진행해주세요");
             }
             else{
-                x1 = e.pageX;
-                y1 = e.pageY;
+<!--                x1 = e.pageX;-->
+<!--                y1 = e.pageY;-->
 
-                var test = x1+" "+ y1;
-                document.getElementById("test").innerHTML = test;
+<!--                var test = x1+" "+ y1;-->
+<!--                document.getElementById("test").innerHTML = test;-->
 
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
-                var td = tr.children();
                 var height = parseInt(tr.offset().top + tr.height() /2);
                 y1 = height;
                 if(!height1.includes(height)){
-
                     height1.push(y1);
-
-                <!-- tr에 있는 모든 값을 가져온다.-->
-                console.log("클릭한 Row의 모든 데이터 : "+tr.text());
-
-                <!--td.eq(index)를 통해 값을 가져옴-->
-                var no = td.eq(0).text();
-                var english_field = td.eq(1).text();
-                var korean_field = td.eq(2).text();
-                var length = td.eq(3).text();
-
-                var obj = {};
-                obj['no'] = no;
-                obj['english_field'] = english_field;
-                obj['korean_field'] = korean_field;
-                obj['length'] = length;
-
-                table1.push(obj);
-                $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
-
+                    table1 = getTableElement(tr , table1);
                 }
-
                 else{
                     alert("이미 선택된 행 입니다.");
                 }
+                console.log(table1);
+                $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
             }
 
 		});
@@ -206,22 +194,32 @@
                 alert("초기화를 먼저 진행해주세요");
             }
             else{
-                x2 = e.pageX;
-                y2 = e.pageY;
+<!--                x2 = e.pageX;-->
+<!--                y2 = e.pageY;-->
 
-                var test = x2+" "+ y2;
-                document.getElementById("test2").innerHTML = test;
+<!--                var test = x2+" "+ y2;-->
+<!--                document.getElementById("test2").innerHTML = test;-->
 
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
-                var td = tr.children();
                 var height = parseInt(tr.offset().top + tr.height() /2);
                 y2 = height;
                 if(!height2.includes(height)){
                     height2.push(height);
+                    table2 = getTableElement(tr , table2)
+                }
+                else{
+                    alert("이미 선택된 행 입니다.");
+                }
+                 console.log(table2);
+                 $("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
+            }
 
-                console.log("클릭한 Row의 모든 데이터 : "+tr.text());
-
+        });
+        function getTableElement(tr ,table){
+                var td = tr.children();
+                console.log("Row의 모든 데이터 : "+tr.text());
+                console.log(td);
                 <!--td.eq(index)를 통해 값을 가져옴-->
                 var no = td.eq(0).text();
                 var english_field = td.eq(1).text();
@@ -234,20 +232,9 @@
                 obj['korean_field'] = korean_field;
                 obj['length'] = length;
                 console.log("obj 값: "+ obj)
-                table2.push(obj);
-
-                $("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
-
-                }
-
-                else{
-                    alert("이미 선택된 행 입니다.");
-                }
-
-                }
-
-            });
-
+                table.push(obj);
+                return table;
+        }
 		function pageClear(){
             d3.selectAll(".line").remove();
             table1 = [];
@@ -302,23 +289,10 @@
                     var height = parseInt(tr.offset().top + tr.height() /2);
                     console.log(height);
                     totalY1.push(height);
+                    table1List = getTableElement(tr,table1List);
+                    }
 
-                    var no = td.eq(0).text();
-                    var english_field = td.eq(1).text();
-                    var korean_field = td.eq(2).text();
-                    var length = td.eq(3).text();
-
-                    var obj = {};
-                    obj['no'] = no;
-                    obj['english_field'] = english_field;
-                    obj['korean_field'] = korean_field;
-                    obj['length'] = length;
-                    table1List.push(obj);
-                    console.log(obj);
-
-                            }
-
-                    });
+            });
 
             index = 0;
 
@@ -333,22 +307,9 @@
                         var height = parseInt(tr.offset().top + tr.height() /2);
                         totalY2.push(height);
                         console.log(height);
-
-                        var no = td.eq(0).text();
-                        var english_field = td.eq(1).text();
-                        var korean_field = td.eq(2).text();
-                        var length = td.eq(3).text();
-
-                        var obj = {};
-                        obj['no'] = no;
-                        obj['english_field'] = english_field;
-                        obj['korean_field'] = korean_field;
-                        obj['length'] = length;
-                        table2List.push(obj);
-                        console.log(obj);
-
-                        }
-                    });
+                        table2List = getTableElement(tr, table2List);
+                       }
+                 });
 
                 for(var i = 0; i< table1List.length ; i++){
                     for(var j =0; j< table2List.length ; j++){
@@ -425,7 +386,7 @@
 
             function createTBody(common, remain, html){
                 for(key in common){
-                        html += '<tr>';
+                        html += '<tr style="background-color: #bbdefb;">';
                         html += '<td>'+common[key].no+'</td>';
                         html += '<td>'+common[key].english_field+'</td>';
                         html += '<td>'+common[key].korean_field+'</td>';
@@ -476,10 +437,10 @@
                 html2 = '';
 
                 if(mode=='auto'){
-                    d3.selectAll(".line").remove();
+<!--                    d3.selectAll(".line").remove();-->
                     alert("초기화 후 매핑부터 시작해주세요.");
-                    $("#table3body").empty();
-                    $("#table4body").empty();
+<!--                    $("#table3body").empty();-->
+<!--                    $("#table4body").empty();-->
                   }
                 else if(table1.length == 0 && table2.length == 0){
                     alert("테이블 매핑 먼저 진행해 주세요");
@@ -506,6 +467,7 @@
                         if(index ==0){
                             index++;
                         }
+
                     else{
                         var tr = $(this);
                         var td = tr.children();
@@ -535,7 +497,6 @@
                             }
                             index++;
                         }
-
                 });
 
                 index = 0;
@@ -609,10 +570,5 @@
                 $("#table4body").empty();
                 $("#table4body").append(html2);
                 }
-
-
             }
-
-
-
 </script>
