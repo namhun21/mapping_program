@@ -60,17 +60,14 @@
           #draw {
             position: absolute;
             width: 438px;
-            height: 400px;
             margin-bottom: 20px;
             float: center;
-
           }
 
           #sidebar-right {
             width: 480px;
             margin-bottom: 20px;
             float: right;
-
           }
           #footer {
             clear: both;
