@@ -311,6 +311,9 @@
             $("#ex1_Result2").html("");
             $("#table3body").empty();
             $("#table4body").empty();
+            $("#footer").hide();
+            $("#footer-sidebar-left").hide();
+            $("#footer-sidebar-right").hide();
         }
         <!-- 자동매핑 함수 -->
         function autoMapping(){
@@ -337,8 +340,10 @@
             var totalY2 = new Array();
             var tableY1 = new Array();
             var tableY2 = new Array();
-
             var index = 0;
+            $("#footer").show();
+            $("#footer-sidebar-left").show();
+            $("#footer-sidebar-right").show();
 
             <!-- 테이블의 tr을 돌며 y 좌표와 데이터값을 가져옴-->
             $('#table1 tr').each(function(){
@@ -522,6 +527,9 @@
 <!--                    $("#table4body").empty();-->
 <!--                }-->
                 else{
+                    $("#footer").show();
+                    $("#footer-sidebar-left").show();
+                    $("#footer-sidebar-right").show();
                     var table1Remain = new Array();
                     var table2Remain = new Array();
                     var index = 0;
