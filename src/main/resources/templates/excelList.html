@@ -76,7 +76,6 @@
 
         <!--            <span class="btn">매핑</span>-->
         <input type="button" id="automapping" value="자동매핑" onclick="autoMapping()" style="width:20%; float:right;"/>
-        <input type="button" id="mapping" value="매핑" onclick="drawLine(y1,y2)" style="width:20%; float:right;"/>
         <input type="button" id="showResult" value="결과보기" onclick="showResult()" style="width:20%; float:right;"/>
         <input type="button" id="pageClear" value="초기화" onclick="pageClear()" style="width:20%; float:right;"/>
 
@@ -139,11 +138,15 @@
         <!-- 전역 변수 -->
         var y1 = 0;
         var y2 = 0;
+        var clickTable1 = 0;
+        var clickTable2 = 0;
         var mode = 'normal';
         var isDrawComplete = false;
         const svg = d3.select(".canvas");
         var table1 = new Array();
         var table2 = new Array();
+        var table1Obj = {};
+        var table2Obj = {};
         var height1 = new Array();
         var height2 = new Array();
         var html1 = '';
@@ -171,7 +174,7 @@
         });
 
             <!--테이블의 Row 클릭시 값 가져오기-->
-		$("#table1 tr").click(function(e){
+		$("#table1 tbody tr").click(function(e){
 
             if(mode == 'auto'){
                 alert("초기화를 먼저 진행해주세요");
@@ -184,29 +187,42 @@
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
                 var td = tr.children();
-                if(td.eq(1).text() == '영문필드명'){
-                        alert("tr부분을 선택해주세요");
+
+                var height = parseInt(tr.offset().top + tr.height() /2);
+                y1 = height;
+                if(height1.includes(y1)){
+                    alert("이미 선택된 행 입니다.");
                 }
                 else{
-                    var height = parseInt(tr.offset().top + tr.height() /2);
-                    y1 = height;
-                    if(!height1.includes(height)){
+                    if(clickTable1 == 0 && clickTable2 == 1){
                         height1.push(y1);
-                        table1 = getTableElement(tr , table1);
+                        height2.push(y2);
+                        table1Obj = createObj(tr, table1Obj);
+                        table1.push(table1Obj);
+                        table2.push(table2Obj);
+                        clickTable1 = 0;
+                        clickTable2 = 0;
+                        table1Obj = {};
+                        table2Obj = {};
+                        drawLine(y1,y2);
                     }
-                    else{
-                        alert("이미 선택된 행 입니다.");
-    <!--                    y1 = 0;-->
+                    else if(clickTable2 == 0){
+                        table1Obj = createObj(tr, table1Obj);
+                        console.log(table1Obj);
+                        clickTable1 = 1;
                     }
-                    console.log(table1);
-                    $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
                 }
+
+                console.log(table1);
+                console.log(table2);
+                $("#ex1_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
+
             }
 
 		});
 
         <!--테이블의 Row 클릭시 값 가져오기-->
-		$("#table2 tr").click(function(e){
+		$("#table2 tbody tr").click(function(e){
             if(mode == 'auto'){
                 alert("초기화를 먼저 진행해주세요");
             }
@@ -217,44 +233,59 @@
                 <!--현재 클릭된 Row(<tr>)-->
                 var tr = $(this);
                 var td = tr.children();
-                if(td.eq(1).text() == '영문필드명'){
-                        alert("tr부분을 선택해주세요");
-                }
-                else{
-
                 var height = parseInt(tr.offset().top + tr.height() /2);
                 y2 = height;
-                if(!height2.includes(height)){
-                    height2.push(height);
-                    table2 = getTableElement(tr , table2)
+                if(height2.includes(y2)){
+                    alert("이미 선택된 행 입니다.");
                 }
                 else{
-                    alert("이미 선택된 행 입니다.");
-<!--                    y2 = 0;-->
+                    if(clickTable1 == 1 && clickTable2 == 0){
+                        height1.push(y1);
+                        height2.push(y2);
+                        table2Obj = createObj(tr, table2Obj);
+                        table1.push(table1Obj);
+                        table2.push(table2Obj);
+                        clickTable1 = 0;
+                        clickTable2 = 0;
+                        table1Obj = {};
+                        table2Obj = {};
+                        drawLine(y1,y2);
+                        }
+                    else if(clickTable1 == 0){
+                        table2Obj = createObj(tr, table2Obj);
+                        console.log(table2Obj);
+                        clickTable2 = 1;
+                    }
                 }
+
+                 console.log(table1);
                  console.log(table2);
                  $("#ex1_Result2").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());
-                }
             }
         });
 
         <!--  테이블 row의 데이터를 가져오는 함수      -->
-        function getTableElement(tr ,table){
-                var td = tr.children();
-                console.log("Row의 모든 데이터 : "+tr.text());
-                console.log(td);
-                <!--td.eq(index)를 통해 값을 가져옴-->
-                var no = td.eq(0).text();
-                var english_field = td.eq(1).text();
-                var korean_field = td.eq(2).text();
-                var length = td.eq(3).text();
+        function createObj(tr,obj){
+            var td = tr.children();
+            console.log("Row의 모든 데이터 : "+tr.text());
+            console.log(td);
+            <!--td.eq(index)를 통해 값을 가져옴-->
+            var no = td.eq(0).text();
+            var english_field = td.eq(1).text();
+            var korean_field = td.eq(2).text();
+            var length = td.eq(3).text();
 
+            obj['no'] = no;
+            obj['english_field'] = english_field;
+            obj['korean_field'] = korean_field;
+            obj['length'] = length;
+            return obj
+        }
+
+        function getTableElement(tr ,table){
                 var obj = {};
-                obj['no'] = no;
-                obj['english_field'] = english_field;
-                obj['korean_field'] = korean_field;
-                obj['length'] = length;
                 console.log("obj 값: "+ obj)
+                obj = createObj(tr,obj);
                 table.push(obj);
                 return table;
         }
@@ -271,6 +302,8 @@
             height2 = [];
             y1=0;
             y2=0;
+            clickTable1 = 0;
+            clickTable2 = 0;
             isDrawComplete = false;
             console.log(table1);
             console.log(table2);
@@ -441,28 +474,26 @@
             function drawLine(table1Y, table2Y){
                     console.log(table1Y+" "+ table2Y);
 
-                    if(table1Y == 0 || table2Y ==0 ){
-                        alert("매핑실패! 초기화 후 다시 시도하세요.");
-                        table1 = [];
-                        table2 = [];
-                        height1 = [];
-                        height2 = [];
-<!--                        d3.selectAll(".line").remove();-->
-<!--                        $("#table3body").empty();-->
-<!--                        $("#table4body").empty();-->
-                    }
-                    else{
-                        svg.append("line")
-                                .attr("x1",2)
-                                .attr("x2",435)
-                                .attr("y1",table1Y-200+35)
-                                .attr("y2",table2Y-200+35)
-                                .attr("stroke","red")
-                                .attr("class","line")
+<!--                    if(table1Y == 0 || table2Y ==0 ){-->
+<!--                        alert("매핑실패! 초기화 후 다시 시도하세요.");-->
+<!--                        table1 = [];-->
+<!--                        table2 = [];-->
+<!--                        height1 = [];-->
+<!--                        height2 = [];-->
+<!--                    }-->
+<!--                    else{-->
+                    svg.append("line")
+                        .attr("x1",2)
+                        .attr("x2",435)
+                        .attr("y1",table1Y-200+35)
+                        .attr("y2",table2Y-200+35)
+                        .attr("stroke","red")
+                        .attr("class","line")
 
-                        }
+<!--                        }-->
                     y1 = 0;
                     y2 = 0;
+
                     console.log(y1+" "+ y2);
                  }
             <!-- 결과보기 버튼 -->
@@ -479,17 +510,17 @@
                     $("#table3body").empty();
                     $("#table4body").empty();
                 }
-                else if(table1.length != table2.length){
-                    alert("매핑 개수가 틀립니다. 처음부터 다시 매핑해주세요");
-                    d3.selectAll(".line").remove();
-                    table1 = [];
-                    table2 = [];
-                    height1 = [];
-                    height2 = [];
-                    y1 = 0; y2 = 0;
-                    $("#table3body").empty();
-                    $("#table4body").empty();
-                }
+<!--                else if(table1.length != table2.length){-->
+<!--                    alert("매핑 개수가 틀립니다. 처음부터 다시 매핑해주세요");-->
+<!--                    d3.selectAll(".line").remove();-->
+<!--                    table1 = [];-->
+<!--                    table2 = [];-->
+<!--                    height1 = [];-->
+<!--                    height2 = [];-->
+<!--                    y1 = 0; y2 = 0;-->
+<!--                    $("#table3body").empty();-->
+<!--                    $("#table4body").empty();-->
+<!--                }-->
                 else{
                     var table1Remain = new Array();
                     var table2Remain = new Array();
