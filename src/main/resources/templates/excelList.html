@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>전문 매핑</title>
     <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="https://d3js.org/d3.v3.js"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
@@ -151,7 +151,7 @@
         var height2 = new Array();
         var html1 = '';
         var html2 = '';
-        (window.onload = function() {  // 화면이 뜬 뒤 처리
+        $(document).ready(function() {  // 화면이 뜬 뒤 처리
 
               var obj1 = document.getElementById('sidebar-left');
               var obj2 = document.getElementById('sidebar-right');
@@ -161,7 +161,7 @@
               var max = Math.max(obj1_height,obj2_height);
 
               obj3.style.height = max + 'px';
-        })();
+        });
 
         <!-- 테이블 tr에 마우스 올려두었을 때 색 변경-->
         $( "#table1 tr, #table2 tr" ).on( "mouseover", function() {
@@ -478,15 +478,6 @@
             <!-- d3.js를 이용해 좌표를 받아 선을 그려줌 -->
             function drawLine(table1Y, table2Y){
                     console.log(table1Y+" "+ table2Y);
-
-<!--                    if(table1Y == 0 || table2Y ==0 ){-->
-<!--                        alert("매핑실패! 초기화 후 다시 시도하세요.");-->
-<!--                        table1 = [];-->
-<!--                        table2 = [];-->
-<!--                        height1 = [];-->
-<!--                        height2 = [];-->
-<!--                    }-->
-<!--                    else{-->
                     svg.append("line")
                         .attr("x1",2)
                         .attr("x2",435)
@@ -495,7 +486,6 @@
                         .attr("stroke","red")
                         .attr("class","line")
 
-<!--                        }-->
                     y1 = 0;
                     y2 = 0;
 
@@ -515,17 +505,7 @@
                     $("#table3body").empty();
                     $("#table4body").empty();
                 }
-<!--                else if(table1.length != table2.length){-->
-<!--                    alert("매핑 개수가 틀립니다. 처음부터 다시 매핑해주세요");-->
-<!--                    d3.selectAll(".line").remove();-->
-<!--                    table1 = [];-->
-<!--                    table2 = [];-->
-<!--                    height1 = [];-->
-<!--                    height2 = [];-->
-<!--                    y1 = 0; y2 = 0;-->
-<!--                    $("#table3body").empty();-->
-<!--                    $("#table4body").empty();-->
-<!--                }-->
+
                 else{
                     $("#footer").show();
                     $("#footer-sidebar-left").show();
