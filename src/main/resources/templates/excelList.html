@@ -326,6 +326,8 @@
                 height2 = [];
                 y1 = 0;
                 y2 = 0;
+                $("#ex1_Result1").html("");
+                $("#ex1_Result2").html("");
 
             }
             html1 = '';
@@ -496,12 +498,14 @@
 
                 html1 = '';
                 html2 = '';
+                $("#ex1_Result1").html("");
+                $("#ex1_Result2").html("");
 
                 if(mode=='auto'){
-                    alert("초기화 후 매핑부터 시작해주세요.");
+                    alert("자동매핑이 이미 수행되어 있습니다. 초기화 후 매핑부터 시작해주세요.");
                   }
                 else if(table1.length == 0 && table2.length == 0){
-                    alert("테이블 매핑 먼저 진행해 주세요");
+                    alert("테이블 매핑 진행 후 클릭 해 주세요");
                     $("#table3body").empty();
                     $("#table4body").empty();
                 }
