@@ -38,7 +38,8 @@ public class ExcelController {
         //파일 확장자명 가져옴
         String extension = FilenameUtils.getExtension(file1.getOriginalFilename());
         if (!extension.equals("xlsx") && !extension.equals("xls") ) {
-            return "ErrorFileType";
+            model.addAttribute("back", "/onePageExcel");
+            return "ErrorFileType1";
         }
         Workbook workbook = null;
 
@@ -77,7 +78,7 @@ public class ExcelController {
         String extension1 = FilenameUtils.getExtension(file1.getOriginalFilename());
         String extension2 = FilenameUtils.getExtension(file2.getOriginalFilename());
         if (!extension1.equals("xlsx") && !extension1.equals("xls") && !extension2.equals("xlsx") && !extension2.equals("xls") ) {
-            return "ErrorFileType";
+            return "ErrorFileType2";
         }
         Workbook workbook1 = null;
         Workbook workbook2 = null;
