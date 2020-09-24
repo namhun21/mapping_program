@@ -32,13 +32,35 @@ public class ExcelController {
     @PostMapping("/excel/onePageRead")
     public String readOneExcel(
                     @RequestParam("file1") MultipartFile file1,Model model) throws IOException { // 하나의 엑셀파일에 2개의 sheet가 있는경우
-        List<List<ExcelData>> excelData = getTwoSheetExcelList(file1); //엑셀파일을 읽어 원본을 리스트에 저장
 
-        //필요 데이터들을 view 단에 전송하기 위해
-        model.addAttribute("data1", excelData.get(0));
-        model.addAttribute("data2", excelData.get(1));
+        List<ExcelData> dataList1 = new ArrayList<>();
+        List<ExcelData> dataList2 = new ArrayList<>();
+        //파일 확장자명 가져옴
+        String extension = FilenameUtils.getExtension(file1.getOriginalFilename());
+        if (!extension.equals("xlsx") && !extension.equals("xls") ) {
+            return "ErrorFileType";
+        }
+        Workbook workbook = null;
 
-        return "excelList";
+        //파일 스트림을 객체로 생성성
+        if (extension.equals("xlsx")) {
+            workbook = new XSSFWorkbook(file1.getInputStream());
+        } else if (extension.equals("xls")) {
+            workbook = new HSSFWorkbook(file1.getInputStream());
+        }
+        try{
+            Sheet worksheet1 = workbook.getSheetAt(0);
+            Sheet worksheet2 = workbook.getSheetAt(1);
+            dataMapping(worksheet1, dataList1);
+            dataMapping(worksheet2, dataList2);
+
+            //필요 데이터들을 view 단에 전송하기 위해
+            model.addAttribute("data1", dataList1);
+            model.addAttribute("data2", dataList2);
+            return "excelList";
+        }catch (Exception e){
+            return "ErrorTwoSheet";
+        }
 
     }
 
@@ -47,68 +69,47 @@ public class ExcelController {
                     @RequestParam("file1") MultipartFile file1,
                     @RequestParam("file2") MultipartFile file2, Model model) throws IOException { // 2
 
-        List<ExcelData> dataList1 = getExcelList(file1); //엑셀파일을 읽어 원본을 리스트에 저장
-        List<ExcelData> dataList2 = getExcelList(file2);
-//        List<List<ExcelData>> autoMappingResult = autoMapping(dataList1,dataList2); //autoMapping 시 데이터들 리스트로 받아옴
-
-        //필요 데이터들을 view 단에 전송하기 위해
-        model.addAttribute("data1", dataList1);
-        model.addAttribute("data2", dataList2);
-
-        return "excelList";
-
-    }
-    //하나의 엑셀파일의 두개의 sheet에서 데이터 불러옴
-    private List<List<ExcelData>> getTwoSheetExcelList(MultipartFile file) throws IOException{
-        List<List<ExcelData>> dataList = new ArrayList<>();
 
         List<ExcelData> dataList1 = new ArrayList<>();
         List<ExcelData> dataList2 = new ArrayList<>();
-        //파일 확장자명 가져옴
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (!extension.equals("xlsx") && !extension.equals("xls") ) {
-            throw new IOException("엑셀파일만 업로드 해주세요.");
-        }
-        Workbook workbook = null;
-
-        //파일 스트림을 객체로 생성성
-        if (extension.equals("xlsx")) {
-            workbook = new XSSFWorkbook(file.getInputStream());
-        } else if (extension.equals("xls")) {
-            workbook = new HSSFWorkbook(file.getInputStream());
-        }
-
-        Sheet worksheet1 = workbook.getSheetAt(0);
-        Sheet worksheet2 = workbook.getSheetAt(1);
-        dataMapping(worksheet1, dataList1);
-        dataMapping(worksheet2, dataList2);
-        dataList.add(dataList1);
-        dataList.add(dataList2);
-        return dataList;
-    }
-
-    //전달받은 파일을 가져오기 위한 메소드
-    private List<ExcelData> getExcelList(MultipartFile file) throws IOException{
-        List<ExcelData> dataList = new ArrayList<>();
 
         //파일 확장자명 가져옴
-        String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-        if (!extension.equals("xlsx") && !extension.equals("xls") ) {
-            throw new IOException("엑셀파일만 업로드 해주세요.");
+        String extension1 = FilenameUtils.getExtension(file1.getOriginalFilename());
+        String extension2 = FilenameUtils.getExtension(file2.getOriginalFilename());
+        if (!extension1.equals("xlsx") && !extension1.equals("xls") && !extension2.equals("xlsx") && !extension2.equals("xls") ) {
+            return "ErrorFileType";
         }
-        Workbook workbook = null;
+        Workbook workbook1 = null;
+        Workbook workbook2 = null;
 
         //파일 스트림을 객체로 생성성
-       if (extension.equals("xlsx")) {
-            workbook = new XSSFWorkbook(file.getInputStream());
-        } else if (extension.equals("xls")) {
-            workbook = new HSSFWorkbook(file.getInputStream());
+        if (extension1.equals("xlsx")) {
+            workbook1 = new XSSFWorkbook(file1.getInputStream());
+        } else if (extension1.equals("xls")) {
+            workbook1 = new HSSFWorkbook(file1.getInputStream());
         }
 
-        Sheet worksheet = workbook.getSheetAt(0);
-        dataMapping(worksheet, dataList);
+        if (extension2.equals("xlsx")) {
+            workbook2 = new XSSFWorkbook(file2.getInputStream());
+        } else if (extension2.equals("xls")) {
+            workbook2 = new HSSFWorkbook(file2.getInputStream());
+        }
 
-        return dataList;
+        try{
+            Sheet worksheet1 = workbook1.getSheetAt(0);
+            Sheet worksheet2 = workbook2.getSheetAt(0);
+            dataMapping(worksheet1, dataList1);
+            dataMapping(worksheet2, dataList2);
+
+            //필요 데이터들을 view 단에 전송하기 위해
+            model.addAttribute("data1", dataList1);
+            model.addAttribute("data2", dataList2);
+            return "excelList";
+            }
+        catch (Exception e){
+            return "ErrorTwoExcel";
+        }
+
     }
 
     //엑셀의 row를 돌며 데이터를 객체로 만들고 객체를 리스트에 저장
